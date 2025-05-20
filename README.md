@@ -1,2 +1,2 @@
 # Arduino-Taskphase
-These were the Projects which I practiced during the Taskphase to learn about Arduino
+These were some Projects which I practiced during the Taskphase to get a grasp on Arduino Coding
