@@ -1,0 +1,27 @@
+const int inputPin1  = 10;    // Pin 15 of L293D IC
+const int inputPin2  = 11;    // Pin 10 of L293D IC
+int EN1 = 3;                 // Pin 1 of L293D IC
+
+void setup()
+
+{
+  
+    pinMode(EN1, OUTPUT);   // where the motor is connected to
+    pinMode(inputPin1, OUTPUT);
+    pinMode(inputPin2, OUTPUT);
+    Serial.begin(9600);
+    Serial.println("Enter values between 0 - 255");
+}
+
+void loop()
+
+{
+  if(Serial.available())         
+    { 
+      int speed = Serial.parseInt();  //Receive Value from serial monitor
+      Serial.println(speed);
+        analogWrite(EN1, speed);      //sets the motors speed
+        digitalWrite(inputPin1, HIGH);
+        digitalWrite(inputPin2, LOW);
+     }
+}
