@@ -1,0 +1,67 @@
+#include <Adafruit_GFX.h>
+#include <Adafruit_SSD1306.h>
+
+// Pin definitions for SPI OLED
+#define SCREEN_WIDTH 128
+#define SCREEN_HEIGHT 64
+#define OLED_RESET    -1
+#define OLED_DC       8
+#define OLED_CS       10
+
+const int irSensorPin = 2;  // IR sensor output pin connected to digital pin 2
+int objectCount = 0;        // Variable to keep track of object count
+int previousState = LOW;    // Previous state of the IR sensor
+int currentState = LOW;     // Current state of the IR sensor
+
+// Create an OLED display object using SPI
+Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &SPI, OLED_DC, OLED_CS, OLED_RESET); 
+
+void setup() {
+  pinMode(irSensorPin, INPUT);  // Set the IR sensor pin as input
+  
+  // Initialize the OLED display
+  if (!display.begin(SSD1306_SWITCHCAPVCC, OLED_CS)) {
+    Serial.println(F("SSD1306 allocation failed"));
+    for(;;);  // Infinite loop to stop execution
+  }
+  
+  display.display();  // Initial clear screen
+  delay(2000);  // Pause for 2 seconds to show the startup screen
+  
+  // Show the initial text
+  display.clearDisplay();
+  display.setTextSize(1);      
+  display.setTextColor(SSD1306_WHITE);  
+  display.setCursor(0, 0);     
+  display.print(F("Object Count:"));
+  display.setCursor(0, 10);  
+  display.print(objectCount);
+  display.display();
+
+  Serial.begin(9600);  // Start serial communication for debugging
+}
+
+void loop() {
+  currentState = digitalRead(irSensorPin);  // Read the IR sensor state
+
+  // Check if the sensor detects an object (transitions from LOW to HIGH)
+  if (currentState == HIGH && previousState == LOW) {
+    objectCount++;  // Increment object count
+    
+    // Update the display with the new count
+    display.clearDisplay();  
+    display.setCursor(0, 0);  
+    display.print(F("Object Count:"));
+    display.setCursor(0, 10);  
+    display.print(objectCount);
+    display.display();
+    
+    // Print to Serial Monitor for debugging
+    Serial.print("Object Count: ");
+    Serial.println(objectCount);
+    
+    delay(200);  // Debounce delay to avoid counting the same object multiple times
+  }
+
+  previousState = currentState;  // Store the current state as previous for next loop
+}
