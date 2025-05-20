@@ -1,0 +1,44 @@
+#define trigPin 13      // Trig pin of HC-SR04
+#define echoPin 12      // Echo pin of HC-SR04
+#define ledPin 11       // LED connected to digital pin 11
+
+void setup() {
+  Serial.begin(9600);
+  pinMode(trigPin, OUTPUT);
+  pinMode(echoPin, INPUT);
+  pinMode(ledPin, OUTPUT);
+}
+
+void loop() {
+  long duration;
+  int distance;
+
+  // Clear the trigPin
+  digitalWrite(trigPin, LOW);
+  delayMicroseconds(2);
+
+  // Set the trigPin HIGH for 10 microseconds
+  digitalWrite(trigPin, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trigPin, LOW);
+
+  // Read the echoPin
+  duration = pulseIn(echoPin, HIGH);
+
+  // Calculate distance in cm
+  distance = duration * 0.034 / 2;
+
+  // Print distance to Serial Monitor
+  Serial.print("Distance: ");
+  Serial.print(distance);
+  Serial.println(" cm");
+
+  // Turn on LED if distance < 10cm, else turn off
+  if (distance < 10) {
+    digitalWrite(ledPin, HIGH);
+  } else {
+    digitalWrite(ledPin, LOW);
+  }
+
+  delay(500); // Wait half a second before next reading
+}
