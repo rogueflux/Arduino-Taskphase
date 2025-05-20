@@ -1,0 +1,65 @@
+#include <LiquidCrystal.h>
+ LiquidCrystal lcd(12, 11, 5, 4, 3, 2);  
+
+const byte buttonPin = 4;
+const char * LargeText = "Priyanshu Sil";  // fix a warning with const
+int iLineNumber = 1;
+int iCursor = 0;
+bool useDisplay = true;
+
+void setup()
+{
+   Serial.begin(115200);
+   pinMode(buttonPin, INPUT_PULLUP);
+   lcd.begin(16, 2);
+   lcd.setCursor (1, 0);
+   lcd.print ("Rugved");
+}
+void loop()
+{
+   static unsigned long timer = 0;
+   unsigned long interval = 300;
+   if (millis() - timer >= interval && useDisplay == true)
+   {
+      timer = millis();
+      UpdateLCDDisplay();
+   }
+   if (digitalRead(buttonPin) == LOW)
+   {
+      useDisplay = false;
+   }
+   else
+   {
+      useDisplay = true;
+   }
+
+}
+
+void UpdateLCDDisplay()
+{
+   int iLenofLargeText = strlen(LargeText);
+   if ( iCursor == (iLenofLargeText - 1))
+   {
+      iCursor = 0;
+   }
+   lcd.setCursor(0, iLineNumber);
+   if ( iCursor < iLenofLargeText - 16)
+   {
+      for ( int iChar = iCursor; iChar < iCursor + 16; iChar++)
+      {
+         lcd.print( LargeText[iChar]);
+      }
+   }
+   else
+   {
+      for ( int iChar = iCursor; iChar < (iLenofLargeText - 1); iChar++)
+      {
+         lcd.print (LargeText[iChar]);
+      }
+      for (int iChar = 0; iChar <= 16 - (iLenofLargeText - iCursor); iChar++)
+      {
+         lcd.print (LargeText[iChar]);
+      }
+   }
+   iCursor++;
+}
