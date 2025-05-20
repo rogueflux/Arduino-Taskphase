@@ -1,0 +1,46 @@
+#include <SPI.h>
+
+// Define CS (Chip Select) pins for each device you want to scan
+#define DEVICE1_CS 10
+#define DEVICE2_CS 11
+#define DEVICE3_CS 12
+
+void setup() {
+  Serial.begin(9600);
+  SPI.begin(); // Initialize SPI bus
+}
+
+void loop() {
+  // Scan for devices
+  scanSPI();
+  delay(2000); // Check again after a delay
+}
+
+void scanSPI() {
+  // Check DEVICE1
+  digitalWrite(DEVICE1_CS, LOW); // Select the device
+  uint8_t response = SPI.transfer(0x00); // Send a dummy byte
+  if (response != 0xFF) {
+    Serial.println("Device 1 Found");
+    // Further device identification or control code here
+  }
+  digitalWrite(DEVICE1_CS, HIGH); // Deselect the device
+
+  // Check DEVICE2
+  digitalWrite(DEVICE2_CS, LOW);
+  response = SPI.transfer(0x00);
+  if (response != 0xFF) {
+    Serial.println("Device 2 Found");
+    // Further device identification or control code here
+  }
+  digitalWrite(DEVICE2_CS, HIGH);
+
+  // Check DEVICE3
+  digitalWrite(DEVICE3_CS, LOW);
+  response = SPI.transfer(0x00);
+  if (response != 0xFF) {
+    Serial.println("Device 3 Found");
+    // Further device identification or control code here
+  }
+  digitalWrite(DEVICE3_CS, HIGH);
+}
