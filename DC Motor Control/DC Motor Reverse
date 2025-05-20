@@ -1,0 +1,24 @@
+int pin7=7;           //Direction control pins
+int pin8=8;           //Direction control pins
+
+void setup(){
+
+pinMode(pin7,OUTPUT); //Arduino Pin#7 as Output 
+pinMode(pin8,OUTPUT); //Arduino Pin#8 as Output 
+}
+
+void loop(){
+
+digitalWrite(pin7,HIGH);   //Pin#7 as High
+digitalWrite(pin8,LOW);    //Pin#8 as Low
+delay(4000);               //Delay 4 seconds Motor rotates in clock wise direction
+digitalWrite(pin7,LOW);    //Pin#7 as Low
+digitalWrite(pin8,LOW);    //Pin#8 as Low 
+delay(3000);               //Delay 3 seconds Motor halts
+digitalWrite(pin8,HIGH);   //Pin#8 as High
+digitalWrite(pin7,LOW);    //Pin#7 as Low
+delay(4000);               //Delay for 4 seconds Motor rotates in anti clock wise direction
+digitalWrite(pin7,LOW);    //Pin#7 as Low
+digitalWrite(pin8,LOW);    //Pin#8 as Low
+delay(2000);               //Delay for 2 seconds Motor halts
+}
